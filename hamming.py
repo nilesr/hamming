@@ -1,5 +1,6 @@
 import math, random, sys, base64
 length = int(sys.argv[1])
+use_lines = int(sys.argv[2]) == 1
 lines = []
 def isparity(pos):
     return pos.count("1") == 1
@@ -27,30 +28,31 @@ bits[random.randint(0, length - 1)] = random.randint(0, 1)
 # print out bits
 lines.append(" ".join(bpos))
 lines.append(" ".join([str(x).rjust(blen, " ") for x in bits]))
-for i in range(length)[::-1]:
-    line = ""
-    if not ppos[i]: continue
-    inline = False
-    guarded_bit = bpos[i].find("1")
-    for j in range(i):
-        if bpos[j][guarded_bit] == "1":
-            pc = "─" if inline else " "
-            uc = "┴" if inline else "└"
-            for i in range(guarded_bit):
-                line += pc
-            line += uc
-            for i in range(blen - guarded_bit):
-                line += "─"
-            inline = True
-        else:
-            if inline:
-                line += "─────"
+if use_lines:
+    for i in range(length)[::-1]:
+        line = ""
+        if not ppos[i]: continue
+        inline = False
+        guarded_bit = bpos[i].find("1")
+        for j in range(i):
+            if bpos[j][guarded_bit] == "1":
+                pc = "─" if inline else " "
+                uc = "┴" if inline else "└"
+                for i in range(guarded_bit):
+                    line += pc
+                line += uc
+                for i in range(blen - guarded_bit):
+                    line += "─"
+                inline = True
             else:
-                line += "     "
-    for i in range(guarded_bit):
-        line += "─"
-    line += "┘"
-    lines.append(line)
+                if inline:
+                    line += "─────"
+                else:
+                    line += "     "
+        for i in range(guarded_bit):
+            line += "─"
+        line += "┘"
+        lines.append(line)
 # begin verification
 invalid = []
 for i in range(length):

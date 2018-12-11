@@ -3,7 +3,8 @@
 	<head>
 		<script>
 			var load = function load() {
-				var length = document.getElementById("length").value;
+				var length = document.getElementById("length").selectedOptions[0].value;
+				var lines = document.getElementById("lines").checked
 				var q = document.getElementById("q");
 				q.innerText = "Loading...";
 				var xhr = new XMLHttpRequest();
@@ -21,7 +22,7 @@
 						a.innerText = result[1];
 					}
 				}
-				xhr.open("GET", "/hamming/ajax.pyhtml?length=" + encodeURIComponent(length));
+				xhr.open("GET", "/hamming/ajax.pyhtml?length=" + encodeURIComponent(length) + "&lines=" + (lines ? "1" : "0"));
 				xhr.send();
 			}
 			var ol = function ol() {
@@ -34,12 +35,24 @@
 		</script>
 	</head>
 	<body onload='ol()'>
-		<input id="length" value="11" />
+		Length: 
+		<select id="length">
+			<option value="11">11,7</option>
+			<option value="7">7,4</option>
+		</select><br />
+		<label for="lines">Lines:</label>
+		<input type="checkbox" checked="true" id="lines" />
+		<br />
+		<button onclick='load()'>Generate</button>
+		<br />
+		Given the following hamming code, determine if there was an error, and if so, which bit the error corresponds to.
 		<br />
 		<pre id="q">Waiting for onload (requires javascript)...</pre>
 		<button onclick='show()'>Display Answer</button>
 		<div id="container" style="display: none;">
 			<pre id="a"></pre>
 		</div>
+		<br />
+		<a href="https://github.com/nilesr/hamming">Code</a>
 	</body>
 </html>
