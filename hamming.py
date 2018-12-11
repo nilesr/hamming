@@ -1,13 +1,13 @@
-import math, random, sys
-length = 11 + random.randint(0, 1)
-
+import math, random, sys, base64
+length = int(sys.argv[1])
+lines = []
 def isparity(pos):
     return pos.count("1") == 1
 blen = math.ceil(math.log2(length)) # 4
 bpos = [bin(length - i)[2:].rjust(blen, "0") for i in range(length)]
 ppos = [isparity(x) for x in bpos]
 slen = ppos.count(False) # 7
-print("{},{} code".format(length, slen))
+lines.append("{},{} code".format(length, slen))
 bits = []
 # generate bits or parity bits
 for i in range(length):
@@ -25,9 +25,10 @@ for i in range(length):
 # fuck with it
 bits[random.randint(0, length - 1)] = random.randint(0, 1)
 # print out bits
-print(" ".join(bpos))
-print(" ".join([str(x).rjust(blen, " ") for x in bits]))
+lines.append(" ".join(bpos))
+lines.append(" ".join([str(x).rjust(blen, " ") for x in bits]))
 for i in range(length)[::-1]:
+    line = ""
     if not ppos[i]: continue
     inline = False
     guarded_bit = bpos[i].find("1")
@@ -36,19 +37,20 @@ for i in range(length)[::-1]:
             pc = "─" if inline else " "
             uc = "┴" if inline else "└"
             for i in range(guarded_bit):
-                sys.stdout.write(pc)
-            sys.stdout.write(uc)
+                line += pc
+            line += uc
             for i in range(blen - guarded_bit):
-                sys.stdout.write("─")
+                line += "─"
             inline = True
         else:
             if inline:
-                sys.stdout.write("─────")
+                line += "─────"
             else:
-                sys.stdout.write("     ")
+                line += "     "
     for i in range(guarded_bit):
-        sys.stdout.write("─")
-    sys.stdout.write("┘\n")
+        line += "─"
+    line += "┘"
+    lines.append(line)
 # begin verification
 invalid = []
 for i in range(length):
@@ -67,6 +69,8 @@ if len(invalid) > 0:
     pos = 0
     for invpos in invalid:
         pos |= int(bpos[invpos], 2)
-    print("Bit in position " + bin(pos)[2:].rjust(blen, "0") + " is invalid")
+    lines.append("Bit in position " + bin(pos)[2:].rjust(blen, "0") + " is invalid")
 else:
-    print("All bits were valid")
+    lines.append("All bits were valid")
+lines = "\n".join(lines)
+print(base64.b64encode(lines.encode("utf-8")).decode("ascii")) # python 2 compat hackery

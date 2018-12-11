@@ -1,0 +1,10 @@
+<%!
+import subprocess, json, base64
+%><%
+length = int(d["length"])
+if length < 0 or length > 72: raise "no"
+output = base64.b64decode(subprocess.check_output(["/usr/bin/python3", "/var/www-python/hamming/hamming.py", str(length)]).decode("ascii")).decode("utf-8").split("\n");
+#output = subprocess.check_output(["/usr/bin/python3", "/var/www-python/hamming/hamming.py", str(length)]).decode("ascii").split("\n")
+q = "\n".join(output[:-1])
+a = "\n".join(output[-1:])
+%>${json.dumps([q, a])}

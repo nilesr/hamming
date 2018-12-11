@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+	<head>
+		<script>
+			var load = function load() {
+				var length = document.getElementById("length").value;
+				var q = document.getElementById("q");
+				q.innerText = "Loading...";
+				var xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4) {
+						if (xhr.status != 200) {
+							alert("errno = -EINVAL; return;\n\n" + xhr.responseText);
+							return;
+						}
+						var a = document.getElementById("a");
+						var container = document.getElementById("container");
+						container.style.display = "none";
+						var result = JSON.parse(xhr.responseText);
+						q.innerText = result[0];
+						a.innerText = result[1];
+					}
+				}
+				xhr.open("GET", "/hamming/ajax.pyhtml?length=" + encodeURIComponent(length));
+				xhr.send();
+			}
+			var ol = function ol() {
+				load();
+			}
+			var show = function show() {
+				var container = document.getElementById("container");
+				container.style.display = "block";
+			}
+		</script>
+	</head>
+	<body onload='ol()'>
+		<input id="length" value="11" />
+		<br />
+		<pre id="q">Waiting for onload (requires javascript)...</pre>
+		<button onclick='show()'>Display Answer</button>
+		<div id="container" style="display: none;">
+			<pre id="a"></pre>
+		</div>
+	</body>
+</html>
