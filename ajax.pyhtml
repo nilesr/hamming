@@ -3,10 +3,11 @@ import subprocess, json, base64
 %><%
 length = int(d["length"])
 lines = int(d["lines"])
+master = int(d["master"])
 if length < 0 or length > 72: raise "no"
 if lines not in [0, 1]: raise "no"
-output = base64.b64decode(subprocess.check_output(["/usr/bin/python3", "/var/www-python/hamming/hamming.py", str(length), str(lines)]).decode("ascii")).decode("utf-8").split("\n");
-#output = subprocess.check_output(["/usr/bin/python3", "/var/www-python/hamming/hamming.py", str(length)]).decode("ascii").split("\n")
+if not master in [0, 1]: raise "no"
+output = base64.b64decode(subprocess.check_output(["/usr/bin/python3", "/var/www-python/hamming/hamming.py", str(length), str(lines), str(master)]).decode("ascii")).decode("utf-8").split("\n");
 q = "\n".join(output[:-1])
 a = "\n".join(output[-1:])
 %>${json.dumps([q, a])}

@@ -5,6 +5,7 @@
 			var load = function load() {
 				var length = document.getElementById("length").selectedOptions[0].value;
 				var lines = document.getElementById("lines").checked
+				var master = document.getElementById("master").checked
 				var q = document.getElementById("q");
 				q.innerText = "Loading...";
 				var xhr = new XMLHttpRequest();
@@ -22,7 +23,7 @@
 						a.innerText = result[1];
 					}
 				}
-				xhr.open("GET", "/hamming/ajax.pyhtml?length=" + encodeURIComponent(length) + "&lines=" + (lines ? "1" : "0"));
+				xhr.open("GET", "/hamming/ajax.pyhtml?length=" + encodeURIComponent(length) + "&lines=" + (lines ? "1" : "0") + "&master=" + (master ? "1" : "0"));
 				xhr.send();
 			}
 			var ol = function ol() {
@@ -40,6 +41,9 @@
 			<option value="11">11,7</option>
 			<option value="7">7,4</option>
 		</select><br />
+		<label for="master">Master bit:</label>
+		<input type="checkbox" checked="true" id="master" />
+		<br />
 		<label for="lines">Lines:</label>
 		<input type="checkbox" checked="true" id="lines" />
 		<br />
