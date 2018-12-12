@@ -42,7 +42,7 @@
 			<option value="7">7,4</option>
 		</select><br />
 		<label for="master">Master bit:</label>
-		<input type="checkbox" checked="true" id="master" />
+		<input type="checkbox" id="master" />
 		<br />
 		<label for="lines">Lines:</label>
 		<input type="checkbox" checked="true" id="lines" />

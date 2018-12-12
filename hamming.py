@@ -81,7 +81,7 @@ for i in range(length):
     valid = parity == bits[i]
     if not valid:
         invalid.append(i)
-lines.append(str(invalid))
+#lines.append(str(invalid))
 pos = 0
 for invpos in invalid:
     pos |= int(bpos[invpos], 2)
